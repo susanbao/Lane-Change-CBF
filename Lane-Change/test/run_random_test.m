@@ -1,8 +1,9 @@
 % define simulation scenario
 dt = 0.01;
 simulation_time = 60;
+simulation_count = 1000;
 param_sys = ParamVeh();
-scenario = 1; % 1 indicates highway, 2 indicates urban road
+scenario = 2; % 1 indicates highway, 2 indicates urban road
 % driving lanes for different scenarios
 if scenario == 1
     lane_width = 3.6;
@@ -11,10 +12,10 @@ elseif scenario == 2
 end
 lanes = StraightLane(3, lane_width, 1500);
 % surrounding vehicle's initial states log
-T = zeros(100, 1);
-initial_state_log = zeros(100, 6, 3);
+T = zeros(simulation_count, 1);
+initial_state_log = zeros(simulation_count, 6, 3);
 % generate 100 groups of random tests
-for i = 1:100
+for i = 1:simulation_count
     i
     % gernerate a controller for lane changing other car
     car6_controller_flag = 2;
