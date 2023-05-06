@@ -1,7 +1,7 @@
 % define simulation scenario
 dt = 0.01;
 simulation_time = 60;
-simulation_count = 1000;
+simulation_count = 100;
 param_sys = ParamVeh();
 scenario = 2; % 1 indicates highway, 2 indicates urban road
 % driving lanes for different scenarios

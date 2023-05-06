@@ -40,10 +40,10 @@ classdef Vehicle < handle
             self.scenario = scenario;
             self.other_log = [initial_lane_id; 1];
         end
-        function update(self)
+        function update(self, vehicle)
             % during the simulation, using this method at each time step to update the vehicle
             if self.dynamics_flag == 0 % when the vehile is a normal vehilce
-                normal_car_update(self);
+                normal_car_update(self, vehicle);
             elseif self.dynamics_flag == 1 % using the controller to calculate the input and update the state
                 ego_vehicle_update(self);
             elseif self.dynamics_flag == 2
@@ -51,24 +51,30 @@ classdef Vehicle < handle
             end
         end
         function plot_vehicle(self)
-            if self.dynamics_flag == 0 | self.dynamics_flag == 2
+            if self.dynamics_flag == 0 || self.dynamics_flag == 2
                 self.draw_vehicle(self.state, (self.param.l_fc + self.param.l_rc), self.param.width, self.dynamics_flag);
             else
                 self.draw_vehicle(self.state, (self.param.l_fc + self.param.l_rc), self.param.width, self.dynamics_flag);
             end
         end
-        function normal_car_update(self)
+        function normal_car_update(self, vehicle)
             self.get_lane_id(self.state);
             speed = self.state(4);
             acceleration = self.input(1);
             self.state(4) = self.state(4) + acceleration * self.dt; % new speed
+            decrese_speed = 0;
+            if vehicle.direction_flag ~= 0
+                if self.state(1) < vehicle.state(1)
+                    decrese_speed = 5;
+                end
+            end
             % speed limit according to different scenarios
             if self.scenario == 1
-                ulim = 33.33;
-                llim = 23;
+                ulim = 33.33 - decrese_speed;
+                llim = 23 -  decrese_speed;
             elseif self.scenario == 2
-                ulim = 16.67;
-                llim = 12;
+                ulim = 16.67 - decrese_speed;
+                llim = 12 - decrese_speed;
             end
             if self.state(4) >= ulim
                 self.state(4) = ulim;

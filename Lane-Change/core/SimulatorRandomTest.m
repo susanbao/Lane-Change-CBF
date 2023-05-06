@@ -22,10 +22,10 @@ classdef SimulatorRandomTest
                     num_car = size(self.other_vehicles, 1);
                     if num_car >= 1
                         for k = 1:num_car
-                            self.other_vehicles(k).update; % update vehicles' state
+                            self.other_vehicles(k).update(self.ego_vehicle); % update vehicles' state
                         end
                     end
-                    self.ego_vehicle.update; % update ego-vehicle's state
+                    self.ego_vehicle.update(self.ego_vehicle); % update ego-vehicle's state
                     if self.ego_vehicle.lane_id == self.ego_vehicle.initial_lane_id + self.ego_vehicle.direction_flag
                         lane_count = lane_count + 1;
                     else
